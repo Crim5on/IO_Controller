@@ -1,5 +1,5 @@
-# IO_Controller
-I/O Controller based on ATmega328P
+# I/O Controller
+I/O controller board based on ATmega328P
 
 
 
