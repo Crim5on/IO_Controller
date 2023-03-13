@@ -41,11 +41,11 @@ under Fedora / Red Hat:
 
 ## Find Arduino Port
 
-sudo dmesg 
+```sudo dmesg``` 
 
 plug USB device in and run cmd again 
 
-sudo dmesg 
+```sudo dmesg``` 
 
 check for the last entry to find something like this: 
 
