@@ -17,5 +17,5 @@
 #define BIT_OVERRIDE_WITH_VAL(byte, bit, val) ((val) ? BIT_SET(byte, bit) : BIT_CLR(byte, bit))
 
 /** @return 1 if bit-th bit of byte is set and 0 otherwise. */
-#define BIT_IS_SET(byte, bit) ((0u == ((y) & (BIT(pos)))) ? 0u : 1u)
+#define BIT_IS_SET(byte, bit) ((0u == ((byte) & (BIT(bit)))) ? 0u : 1u)
 
