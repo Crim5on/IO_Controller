@@ -45,7 +45,7 @@ main.hex: main.run
 	@echo "generating hexfile .."
 	avr-objcopy -O ihex -R .eeprom main.run main.hex
 
-main.run: main.o hal/pin.o
+main.run: main.o hal/pin.o hal/serial.o
 	@echo "linking compiled files to main.run .."
 	$(CC) $(LDFLAGS) -o $@ $^
 
@@ -57,6 +57,9 @@ hal/pin.o: hal/pin.c hal/pin.h
 	@echo "compiling pin.c .."
 	$(CC) $(CFLAGS) -c -o $@ $<
 
+hal/serial.o: hal/serial.c hal/serial.h
+	@echo "compiling serial.c .."
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 upload: main.hex
 	@echo "flashing hex file to microcontroller .."
