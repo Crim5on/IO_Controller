@@ -2,7 +2,7 @@
 
 
 /** @return a byte with only bit-th bit set. */
-#define BIT(bit) (1UL << bit)
+#define BIT(bit) (1u << bit)
 
 /** Raise bit-th bit in byte. */
 #define BIT_SET(byte, bit) ((byte) |= BIT(bit))
