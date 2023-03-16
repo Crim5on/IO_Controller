@@ -27,12 +27,27 @@ void serialSetup(const uint32_t baudRate)
 
 void serialSendWithBusyWait(const uint8_t byte)
 {
-    // wait for USART Data Register (UDREn) to be empty
+    // wait for USART Data Register Empty (UDREn) flag to be set.
     // [ RXCn | TXCn | UDREn | FEn | DORn | UPEn | U2Xn | MPCMn ]
     while(!BIT_IS_SET(UCSR0A, UDRE0)){
         ; // wait
     }
 
-    // writing data byte into the USART Data Register (UDR) automatically sends it
+    // writing data byte into the USART Data Register (UDR) (automatically sends it)
     UDR0 = byte;    
+}
+
+
+uint8_t serialReceiveWithBusyWait(void)
+{
+    // wait for RXC0 (USART Receive Complete 0) flag to be set.
+    // [ RXCn | TXCn | UDREn | FEn | DORn | UPEn | U2Xn | MPCMn ]
+    while (!BIT_IS_SET(UCSR0A, RXC0))
+    {
+        ; // wait
+    }
+
+    // read byte from transmit buffer // TODO: ???
+    uint8_t byte = UDR0;
+    return byte;
 }

@@ -42,6 +42,8 @@ void loop(void)
     BIT_OVERRIDE_WITH_VAL(g_PinStates, 0, digitalRead(A3));
 
 
+
+
     // transceive message over serial (wait for cmd) UART
     // read serial until ready
     // a.) send g_PinStates
@@ -50,7 +52,16 @@ void loop(void)
     for(uint8_t i = 0; i < sizeof(testMsg)-1; i++){
         serialSendWithBusyWait(testMsg[i]);
     }
+
     _delay_ms(2000);
+
+    // testcode to receive:
+    uint8_t receivedByte = serialReceiveWithBusyWait();
+    if(receivedByte == 'A'){
+        digitalWrite(D5, HIGH);
+    }
+
+
 
 
     // ? -> send input states 0 0 0 0 

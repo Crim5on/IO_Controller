@@ -39,7 +39,7 @@ ARDUINO_USB ?= /dev/ttyUSB0
 
 
 # final hexfile that can be flashed
-all: main.hex
+all: main.hex socket
 
 main.hex: main.run
 	@echo "generating hexfile .."
@@ -64,6 +64,10 @@ hal/serial.o: hal/serial.c hal/serial.h
 upload: main.hex
 	@echo "flashing hex file to microcontroller .."
 	avrdude -F -V -c ${PROGRAMMER} -p ${MCU_MODEL} -P ${ARDUINO_USB} -b ${BAUDRATE} -U flash:w:main.hex  
+
+socket: com_socket/socket.c
+	@echo "compiling socket.c .."
+	gcc -Wall -Wextra -Werror -std=c99 -o com_socket/socket.o com_socket/socket.c
 
 clean:
 	@echo "cleaning up .."
