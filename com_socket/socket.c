@@ -24,6 +24,7 @@
     13  "Permission denied"
 */
 
+//NOTE: working on -> https://blog.mbedded.ninja/programming/operating-systems/linux/linux-serial-ports-using-c-cpp/
 
 
 
@@ -35,7 +36,7 @@ void setupSerialSocket(void);
 
 int main()
 {
-    printf("Hello World!\n");
+    // CHAPTER 5.) Configuration Setup
 
     // open serial port
     int serialPort = open(COMPORT, O_RDWR);
@@ -52,6 +53,8 @@ int main()
     }
 
 
+    // CHAPTER 6.) Control Modes
+
     // NOTE: macros cannot be used as mac
     // configure comunication settings to 8N1
     BIT_FIELD_CLR(tty.c_cflag, CSIZE);   // reset all size bits
@@ -63,9 +66,25 @@ int main()
     //tty.c_cflag &= ~PARENB;     // clear parity bit flag (No parity)
     //tty.c_cflag &= ~CSTOPB;     // clear (2nd) stop bit (-> 1 stop bit)
     
-    // Disable RTS/CTS hardware flow contro
-    BIT_FIELD_CLR(tty.c_cflag, CRTSCTS);
+    BIT_FIELD_CLR(tty.c_cflag, CRTSCTS);    // disable RTS/CTS hardware flow control
+    BIT_FIELD_SET(tty.c_cflag, CREAD);      // enable READ (to read from serial)
+    BIT_FIELD_SET(tty.c_cflag, CLOCAL);     // enable ignore ctrl lines
 
 
+    // CHAPTER 7.) Local Modes
+
+
+
+
+
+
+    // CHAPTER 8.) Input Modes
+
+
+    // CHAPTER 9.) Output Modes
+
+
+
+    printf("Hello World!\n");
     return EXIT_SUCCESS;
 }
