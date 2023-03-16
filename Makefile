@@ -67,7 +67,7 @@ upload: main.hex
 
 socket: com_socket/socket.c
 	@echo "compiling socket.c .."
-	gcc -Wall -Wextra -Werror -std=c99 -o com_socket/socket.o com_socket/socket.c
+	gcc -Wall -Wextra -Werror -std=gnu99 -o com_socket/socket.o com_socket/socket.c
 
 clean:
 	@echo "cleaning up .."
