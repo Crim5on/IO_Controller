@@ -24,9 +24,6 @@
     13  "Permission denied"
 */
 
-//NOTE: working on -> https://blog.mbedded.ninja/programming/operating-systems/linux/linux-serial-ports-using-c-cpp/
-
-
 
 
 
@@ -36,7 +33,7 @@ void setupSerialSocket(void);
 
 int main()
 {
-    // CHAPTER 5.) Configuration Setup
+    // Configuration Setup
 
     // open serial port
     int serialPort = open(COMPORT, O_RDWR);
@@ -53,7 +50,7 @@ int main()
     }
 
 
-    // CHAPTER 6.) Control Modes
+    // Control Modes
 
     // NOTE: macros cannot be used as mac
     // configure comunication settings to 8N1
@@ -71,18 +68,60 @@ int main()
     BIT_FIELD_SET(tty.c_cflag, CLOCAL);     // enable ignore ctrl lines
 
 
-    // CHAPTER 7.) Local Modes
+    // Local Flags
+    BIT_FIELD_CLR(tty.c_lflag, ICANON);     // disable canonical mode
+    BIT_FIELD_CLR(tty.c_lflag, ECHO);       // disable echo
+    BIT_FIELD_CLR(tty.c_lflag, ECHOE);      // disable erasure
+    BIT_FIELD_CLR(tty.c_lflag, ECHONL);     // disable linebreak echo
+    BIT_FIELD_CLR(tty.c_lflag, ISIG);       // disable signal characters
+
+    // Input Flags
+    BIT_FIELD_CLR(tty.c_iflag, (IXON|IXOFF|IXANY));      // disable sw flow ctrl
+    // disable special handling of bytes
+    BIT_FIELD_CLR(tty.c_iflag, (PARMRK|IGNBRK|ISTRIP|ICRNL|BRKINT|INLCR|IGNCR));
+
+
+    // Output Flags
+    BIT_FIELD_CLR(tty.c_oflag, OPOST);      // disable special handling of bytes
+    BIT_FIELD_CLR(tty.c_oflag, ONLCR);      // disable conversion of \n to \r
+
+    // Configure Blocking and Timeout Read Options
+    tty.c_cc[VMIN] = 1;     // wait until 1 byte is received  
+    tty.c_cc[VTIME] = 0;    // no timeout (blocking) - 0 [deciseconds]
+
+    // Configure input and output boudrate
+    cfsetispeed(&tty, B9600);
+    cfsetospeed(&tty, B9600);
+
+
+    // Save termios struct to linux config file
+    returnValue = tcsetattr(serialPort, TCSANOW, &tty);
+    if(returnValue != 0){
+        printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
+    }
+
+
+    /* ### WRITING ### */
+    uint8_t g_PinStates = 0b00000001;
+    int numberOfBytesSent = write(serialPort, g_PinStates, sizeof(g_PinStates));
+    if(numberOfBytesSent >= 0){
+        printf("Transmitted %i bytes of data.\n", numberOfBytesSent);
+    }else{
+        printf("ERROR while transmitting data. (%i)\n", numberOfBytesSent);
+    }
 
 
 
+    /* ### READING ### */
+    int numberOfBytesReceived = read(serialPort, g_PinStates, sizeof(g_PinStates));
+    if(numberOfBytesReceived >= 0){
+        printf("Received %i bytes of data.\n", numberOfBytesReceived);
+    }else{
+        printf("ERROR while transmitting data. (%i)\n", numberOfBytesReceived);
+    }
 
-
-
-    // CHAPTER 8.) Input Modes
-
-
-    // CHAPTER 9.) Output Modes
-
+    /* ### CLOSING ### */
+    close(serialPort);
 
 
     printf("Hello World!\n");

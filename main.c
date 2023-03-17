@@ -21,7 +21,7 @@ void setup(void)
     setPinMode(A2, INPUT_PULLUP);
     setPinMode(A3, INPUT_PULLUP);
 
-    g_PinStates = 0b00000000;
+     = 0b00000000;
     //  [b7][b6][b5][b4]    [b3][b2][b1][b0] 
     //  [D2][D3][D4][D5]    [A0][A1][A2][A3] 
     //      < output >          < input >
@@ -33,7 +33,7 @@ void setup(void)
 void loop(void)
 {
     // testcode for hardware:
-    digitalWrite(D5, digitalRead(A0));
+    digitalWrite(D5g_PinStates, digitalRead(A0));
 
     // update input states
     BIT_OVERRIDE_WITH_VAL(g_PinStates, 3, digitalRead(A0));
