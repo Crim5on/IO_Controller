@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdbool.h>
 
 // Linux headers
 #include <fcntl.h>      // Contains file controls like O_RDWR
@@ -16,25 +17,61 @@
 #define BIT_FIELD_SET(field, bitmask) (field |= bitmask)
 #define BIT_FIELD_CLR(field, bitmask) (field &= ~bitmask)
 
-
 #define COMPORT "/dev/ttyUSB0"
 
-/* Error Codes:
-    2   "No such file or directory"
-    13  "Permission denied"
-*/
 
 
 
 
-void setupSerialSocket(void);
+/** @returns initialised serial port handler */
+int ioControllerSetupSerialSocket(void);
+
+/** @returns logical state of input pin */
+bool ioControllerReadPinState(uint8_t pin);
+
+/** sets logical state of output pin */
+void ioControllerWritePinState(uint8_t pin, bool state);
 
 
 
+/** example implementation */
 int main()
 {
-    // Configuration Setup
+    int serialPort = ioControllerSetupSerialSocket();
 
+
+    /* ### WRITING ### */
+    uint8_t g_PinStates = 0b00000001;
+    int numberOfBytesSent = write(serialPort, &g_PinStates, sizeof(g_PinStates));
+    if(numberOfBytesSent >= 0){
+        printf("Transmitted %i bytes of data.\n", numberOfBytesSent);
+    } else{
+        printf("ERROR while transmitting data. (%i)\n", numberOfBytesSent);
+    }
+
+
+    /* ### READING ### */
+    int numberOfBytesReceived = read(serialPort, &g_PinStates, sizeof(g_PinStates));
+    if(numberOfBytesReceived >= 0){
+        printf("Received %i bytes of data.\n", numberOfBytesReceived);
+    } else{
+        printf("ERROR while transmitting data. (%i)\n", numberOfBytesReceived);
+    }
+
+
+    /* ### CLOSING ### */
+    close(serialPort);
+
+    printf("Hello World!\n");
+    return EXIT_SUCCESS;
+}
+
+
+
+
+
+int ioControllerSetupSerialSocket(void)
+{
     // open serial port
     int serialPort = open(COMPORT, O_RDWR);
     if(serialPort < 0){
@@ -52,7 +89,6 @@ int main()
 
     // Control Modes
 
-    // NOTE: macros cannot be used as mac
     // configure comunication settings to 8N1
     BIT_FIELD_CLR(tty.c_cflag, CSIZE);   // reset all size bits
     BIT_FIELD_SET(tty.c_cflag, CS8);     // set 8 data bits
@@ -93,37 +129,11 @@ int main()
     cfsetispeed(&tty, B9600);
     cfsetospeed(&tty, B9600);
 
-
     // Save termios struct to linux config file
     returnValue = tcsetattr(serialPort, TCSANOW, &tty);
     if(returnValue != 0){
         printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
     }
 
-
-    /* ### WRITING ### */
-    uint8_t g_PinStates = 0b00000001;
-    int numberOfBytesSent = write(serialPort, g_PinStates, sizeof(g_PinStates));
-    if(numberOfBytesSent >= 0){
-        printf("Transmitted %i bytes of data.\n", numberOfBytesSent);
-    }else{
-        printf("ERROR while transmitting data. (%i)\n", numberOfBytesSent);
-    }
-
-
-
-    /* ### READING ### */
-    int numberOfBytesReceived = read(serialPort, g_PinStates, sizeof(g_PinStates));
-    if(numberOfBytesReceived >= 0){
-        printf("Received %i bytes of data.\n", numberOfBytesReceived);
-    }else{
-        printf("ERROR while transmitting data. (%i)\n", numberOfBytesReceived);
-    }
-
-    /* ### CLOSING ### */
-    close(serialPort);
-
-
-    printf("Hello World!\n");
-    return EXIT_SUCCESS;
+    return serialPort;
 }
