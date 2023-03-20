@@ -65,9 +65,9 @@ upload: main.hex
 	@echo "flashing hex file to microcontroller .."
 	avrdude -F -V -c ${PROGRAMMER} -p ${MCU_MODEL} -P ${ARDUINO_USB} -b ${BAUDRATE} -U flash:w:main.hex  
 
-socket: com_socket/socket.c
-	@echo "compiling socket.c .."
-	gcc -Wall -Wextra -Werror -std=gnu99 -o com_socket/socket.o com_socket/socket.c
+socket: serialInterface/socket.c
+	@echo "compiling serial interface .."
+	gcc -Wall -Wextra -Werror -std=gnu99 -o serialInterface/socket.o serialInterface/socket.c
 
 clean:
 	@echo "cleaning up .."

@@ -51,3 +51,12 @@ uint8_t serialReceiveWithBusyWait(void)
     uint8_t byte = UDR0;
     return byte;
 }
+
+void flushInput(void)
+{
+    uint8_t dummy;
+    while(BIT_IS_SET(UCSR0A, RXC0)){
+        dummy = UDR0;
+    }
+    dummy++; // workaround compiler warnings
+}
