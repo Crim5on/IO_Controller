@@ -30,7 +30,7 @@ void setup(void)
 
     // initialise output pins low
     digitalWrite(D5, HIGH);     // writing reboots arduino??
-    _delay_ms(1000);
+    _delay_ms(2000);
     digitalWrite(D5, LOW);
 }
 
@@ -54,9 +54,16 @@ void loop(void)
     
     uint8_t receivedByte = 0b00000000;
     receivedByte = serialReceiveWithBusyWait();
-    if(receivedByte){
+    if(receivedByte == 0b10100000){
         digitalWrite(D5, HIGH);
-        _delay_ms(1000);
+        _delay_ms(40);
+        digitalWrite(D5, LOW);
+        _delay_ms(40);
+        digitalWrite(D5, HIGH);
+        _delay_ms(40);
+    }else{
+        digitalWrite(D5, HIGH);
+        _delay_ms(500);
     }
     digitalWrite(D5, LOW);
     

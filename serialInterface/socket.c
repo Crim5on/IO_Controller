@@ -39,17 +39,23 @@ int main()
 {
     printf("\nstarting socket ..");
     int serialPort = ioControllerSetupSerialSocket();
-    uint8_t g_PinStates = 0b10100000;
+    uint8_t g_PinStates = 0b10100001;
 
 
     
     /* ### WRITING ### */
-    
-    int numberOfBytesSent = write(serialPort, &g_PinStates, sizeof(g_PinStates));
-    if(numberOfBytesSent >= 0){
-        printf("\nTransmitted %i bytes of data.\n", numberOfBytesSent);
-    } else{
-        printf("\nERROR while transmitting data. (%i)\n", numberOfBytesSent);
+    char mychar = 'a';
+    while(mychar != 'x'){
+        
+        printf("\nEnter a charcter to send a byte, \nor press (x) to exit!\n");
+        scanf("%c", &mychar);
+        
+        int numberOfBytesSent = write(serialPort, &g_PinStates, sizeof(g_PinStates));
+        if(numberOfBytesSent >= 0){
+            printf("\nTransmitted %i bytes of data.\n", numberOfBytesSent);
+        } else{
+            printf("\nERROR while transmitting data. (%i)\n", numberOfBytesSent);
+        }
     }
     
 
