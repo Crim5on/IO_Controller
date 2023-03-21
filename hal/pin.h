@@ -51,6 +51,7 @@ void setPinMode(const uint8_t pin, const Mode mode);
 
 void digitalWrite(const uint8_t pin, const bool value);
 
+/** @returns logical state of pin (reversed if pullup is set) */
 int8_t digitalRead(const uint8_t pin);
 
 int8_t pinIsSetAsInput(const uint8_t pin);

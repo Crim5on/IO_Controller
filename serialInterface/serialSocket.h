@@ -1,4 +1,5 @@
-/** comunication socket for IO controller (MWE) */
+/** header only implementation serial-socket for IO controller (MWE) */
+#pragma once
 
 // C library headers
 #include <stdio.h>
@@ -17,80 +18,12 @@
 #define BIT_FIELD_SET(field, bitmask) (field |= bitmask)
 #define BIT_FIELD_CLR(field, bitmask) (field &= ~bitmask)
 
+// comport the MCU is connected to
 #define COMPORT "/dev/ttyUSB0"
 
 
-
-
-
+//TODO: refactor!
 /** @returns initialised serial port handler */
-int ioControllerSetupSerialSocket(void);
-
-/** @returns logical state of input pin */
-bool ioControllerReadPinState(uint8_t pin);
-
-/** sets logical state of output pin */
-void ioControllerWritePinState(uint8_t pin, bool state);
-
-
-
-/** example implementation */
-int main()
-{
-    printf("\nstarting socket ..");
-    int serialPort = ioControllerSetupSerialSocket();
-    uint8_t g_PinStates = 0b10100001;
-
-
-    
-    /* ### WRITING ### */
-    char mychar = 'a';
-    while(mychar != 'x'){
-        
-        printf("\nEnter a charcter to send a byte, \nor press (x) to exit!\n");
-        scanf("%c", &mychar);
-        
-        int numberOfBytesSent = write(serialPort, &g_PinStates, sizeof(g_PinStates));
-        if(numberOfBytesSent >= 0){
-            printf("\nTransmitted %i bytes of data.\n", numberOfBytesSent);
-        } else{
-            printf("\nERROR while transmitting data. (%i)\n", numberOfBytesSent);
-        }
-    }
-    
-
-    /* ### READING ### */       // WORKS!
-    /*
-    printf("\n1.) g_PinStates: %i", g_PinStates);
-    int numberOfBytesReceived = read(serialPort, &g_PinStates, sizeof(g_PinStates));
-    for(int i=0; numberOfBytesReceived > 0; i++){
-        printf("\n%i.) g_PinStates: %i", i, g_PinStates);
-        numberOfBytesReceived = read(serialPort, &g_PinStates, sizeof(g_PinStates));
-    }
-    */
-
-
-
-    /*
-    if(numberOfBytesReceived >= 0){
-        printf("\nReceived %i bytes of data.\n", numberOfBytesReceived);
-    } else{
-        printf("\nERROR while transmitting data. (%i)\n", numberOfBytesReceived);
-    }
-    printf("\n2.) g_PinStates: %i", g_PinStates);
-    */
-
-    /* ### CLOSING ### */
-    close(serialPort);
-
-    printf("\nEXIT_SUCCESS!\n");
-    return EXIT_SUCCESS;
-}
-
-
-
-
-
 int ioControllerSetupSerialSocket(void)
 {
     // open serial port
@@ -107,7 +40,6 @@ int ioControllerSetupSerialSocket(void)
         printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
     }
 
-
     // Control Modes
 
     // configure comunication settings to 8N1
@@ -115,10 +47,6 @@ int ioControllerSetupSerialSocket(void)
     BIT_FIELD_SET(tty.c_cflag, CS8);     // set 8 data bits
     BIT_FIELD_CLR(tty.c_cflag, PARENB);  // clear parity bit flag (No parity)
     BIT_FIELD_CLR(tty.c_cflag, CSTOPB);  // clear (2nd) stop bit (-> 1 stop bit)
-    //tty.c_cflag &= ~CSIZE;      // reset all size bits
-    //tty.c_cflag |= CS8;         // set 8 data bits
-    //tty.c_cflag &= ~PARENB;     // clear parity bit flag (No parity)
-    //tty.c_cflag &= ~CSTOPB;     // clear (2nd) stop bit (-> 1 stop bit)
     
     BIT_FIELD_CLR(tty.c_cflag, CRTSCTS);    // disable RTS/CTS hardware flow control
     BIT_FIELD_SET(tty.c_cflag, CREAD);      // enable READ (to read from serial)
