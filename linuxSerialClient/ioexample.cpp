@@ -1,18 +1,21 @@
 #include <iostream>
-#include "IO_ControllerSerialInterace.hpp"
+#include "IO_ControllerSerialClient.hpp"
 
+// compile:
 // g++ -std=c++17 -Wall -Wextra  main_example.cpp -o main_example.o 
 
-int main()
+int main (void)
 {
+    char option; 
+    int pin;
+    bool state;
 
-    IO_ControllerSerialInterface io_controller = IO_ControllerSerialInterface();
+    // initialise a io controller object:
+    IO_ControllerSerialClient io_controller = IO_ControllerSerialClient("/dev/ttyUSB0");
+
 
     while (true)
     {
-        char option; 
-        int pin;
-        bool state;
         std::cout << "\n\nEnter [r] to read a pin state, [w] to write a pin state, or [x] to exit: " << std::endl;
         std::cin >> option;
 

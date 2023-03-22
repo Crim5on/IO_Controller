@@ -1,9 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include <stdint.h>
+#include <string>
+#include <exception>
 
-#include "serialSocket.h"
+#include "lxSerial.h"
 #include "../utils/bit.h"
 
 // NOTE: global pin states in one byte
@@ -13,19 +14,17 @@
 
 
 
-
-// TODO: make singleton.
-
-class IO_ControllerSerialInterface
+class IO_ControllerSerialClient
 {
     private:
         uint8_t g_PinStates;
         int serialPortHandle;
         void updatePinStates(void);
+        bool alreadyInitialised;
 
     public:
-        IO_ControllerSerialInterface();
-        ~IO_ControllerSerialInterface();
+        IO_ControllerSerialClient(const std::string comPort);
+        ~IO_ControllerSerialClient();
 
         /** @returns logical state of input pin */
         bool readPinState(uint8_t pin);
@@ -35,14 +34,13 @@ class IO_ControllerSerialInterface
 };
 
 
-IO_ControllerSerialInterface::IO_ControllerSerialInterface()
+IO_ControllerSerialClient::IO_ControllerSerialClient(const std::string comPort)
 {
     g_PinStates = 0b00000000;
-    serialPortHandle = ioControllerSetupSerialSocket();
+    serialPortHandle = initialiseSerialConnection(comPort.c_str());
 
     if(serialPortHandle < 0){
-        std::cerr << "ERROR while opening serial port!" << std::endl;
-        std::cerr << "errNo.: " << errno << " msg: " << strerror(errno) << std::endl;
+        throw std::runtime_error("ERROR while initialising serial port!");
     }
     else{
         std::cout << "Serial Connection Open." << std::endl;
@@ -50,30 +48,28 @@ IO_ControllerSerialInterface::IO_ControllerSerialInterface()
 }
 
 
-IO_ControllerSerialInterface::~IO_ControllerSerialInterface()
+IO_ControllerSerialClient::~IO_ControllerSerialClient()
 {
     close(serialPortHandle);
     std::cout << "Serial Connection Closed." << std::endl;
 }
 
 
-void IO_ControllerSerialInterface::updatePinStates(void)
+void IO_ControllerSerialClient::updatePinStates(void)
 {
     int numberOfBytesSent = write(serialPortHandle, &g_PinStates, sizeof(g_PinStates));
     if(numberOfBytesSent < 0){
-        std::cerr << "ERROR while writing on serial port! (" << numberOfBytesSent << ")" << std::endl;
-        // throw exception;
+        throw std::runtime_error("ERROR while writing on serial port!");
     }
 
     int numberOfBytesReceived = read(serialPortHandle, &g_PinStates, sizeof(g_PinStates));
     if(numberOfBytesReceived < 0){
-        std::cerr << "ERROR while reading from serial port! (" << numberOfBytesReceived << ")" << std::endl;
-        // throw exception;
+        throw std::runtime_error("ERROR while reading from serial port!");
     }
 }
 
 
-bool IO_ControllerSerialInterface::readPinState(uint8_t pin)
+bool IO_ControllerSerialClient::readPinState(uint8_t pin)
 {
     updatePinStates();
     bool pinState = BIT_IS_SET(g_PinStates, pin);
@@ -81,7 +77,7 @@ bool IO_ControllerSerialInterface::readPinState(uint8_t pin)
 }
 
 
-void IO_ControllerSerialInterface::writePinState(uint8_t pin, bool state)
+void IO_ControllerSerialClient::writePinState(uint8_t pin, bool state)
 {
     BIT_OVERRIDE_WITH_VAL(g_PinStates, pin, state);
     updatePinStates();
