@@ -20,7 +20,7 @@ Pin states can be read and written to using a serial communication client that i
 
 Build Everything: ```make```
 
-Only Compile Example Code: ```make ioexample```
+Only Compile Example Code: ```make ioexample.run```
 
 Upload Compiled Code to IO Board: ```make upload```
 
@@ -50,11 +50,9 @@ If on Fedora / Red Hat:
 
 ## Find Arduino Port
 
-With the Arduino NOT plugged-in type ```sudo dmesg``` and hit enter.
-
-Then connect the Arduino to your computer and run ```sudo dmesg``` again to see what has changed. Check the last lines to find something like this: 
+With the Arduino NOT plugged in, type ```sudo dmesg``` and hit enter. Then connect the Arduino to your computer and run ```sudo dmesg``` again to see what has changed. Check the last lines to find something like this: 
 
 ```[16792.214255] usb 1-1.1: ch341-uart converter now attached to ttyUSB0```
 
-This means that the Arduino is now connected to port "/dev/ttyUSB0". Note that under Ubuntu (and some other distros) there is a pre-installed application called BRLTTY that causes USB serial device detection to fail. This can be resoved by simply uninstalling BRLTTY. (You're welcome! ;)) 
+This means that the Arduino is now connected to port "/dev/ttyUSB0". Note that under Ubuntu (and some other distros) there is a pre-installed application called BRLTTY that causes USB serial device detection to fail. This can be resoved by simply uninstalling BRLTTY. (You're Welcome!) 
 
