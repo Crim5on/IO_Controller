@@ -13,22 +13,18 @@ Design a DI/DO extension board featuring opto-coupled pins to protect the board 
 
 
 ## Communication
-Pin states can be read and written to using a serial communication client that is shiped with this repository. The directory ```linuxSerialClient``` contains a C++ file that serves a working example code, demonstrating how the serial client can be used on a Linux system. To build it, simply run ```Make ioexample.run``` and start the binary.
+Pin states can be read and written to using a serial communication client that is shiped with this repository. The directory ```linuxSerialClient/``` contains a C++ file that serves a working example code, demonstrating how the serial client can be used on a Linux system. To build it, simply run ```make ioexample.run``` and start the binary.
 
 
 ## Makefile Usage
 
-Build Everything
-```make```
+Build Everything: ```make```
 
-Only Compile Example Code
-```make ioexample```
+Only Compile Example Code: ```make ioexample```
 
-Upload Compiled Code to IO Board 
-```make upload```
+Upload Compiled Code to IO Board: ```make upload```
 
-Clean Up Compiled Files 
-```make clean```
+Clean Up Compiled Files: ```make clean```
 
 
 
@@ -39,28 +35,26 @@ Clean Up Compiled Files
 
 ## Set Up AVR Toolchain
 
-make sure arduino driver is installed 
+Make Sure Arduino Driver is Installed: 
 ```sudo apt install arduino```
 
-check distribution:
+Check Linux Distribution: 
 ```cat /etc/*-release | grep PRETTY_NAME```
 
-under Ubuntu / Debian:
+If on Ubuntu / Debian: 
 ```sudo apt install -y gcc-avr binutils-avr avr-libc avrdude make```
 
-under Fedora / Red Hat:
+If on Fedora / Red Hat: 
 ```sudo dnf install -y avr-gcc avr-binutils avr-libc avrdude make```
 
 
 ## Find Arduino Port
 
-```sudo dmesg``` 
+With the Arduino NOT plugged-in type ```sudo dmesg``` and hit enter.
 
-plug USB device in and run cmd again 
+Then connect the Arduino to your computer and run ```sudo dmesg``` again to see what has changed. Check the last lines to find something like this: 
 
-```sudo dmesg``` 
+```[16792.214255] usb 1-1.1: ch341-uart converter now attached to ttyUSB0```
 
-check for the last entry to find something like this: 
-
-```[16208.532075] usb 1-1: New USB device found, idVendor=1a86, idProduct=7523, bcdDevice= 2.54```
+This means that the Arduino is now connected to port "/dev/ttyUSB0". Note that under Ubuntu (and some other distros) there is a pre-installed application called BRLTTY that causes USB serial device detection to fail. This can be resoved by simply uninstalling BRLTTY. (You're welcome! ;)) 
 
