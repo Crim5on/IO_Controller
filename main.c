@@ -4,11 +4,13 @@
 #include "utils/bit.h"
 
 
-// global pin states in one byte
+/*  NOTE: BYTE DEFINITION - BIT-TO-PIN MAPPING
+                < output >         < input >
+    bits:   [b7][b6][b5][b4]    [b3][b2][b1][b0] 
+    pins:   [D2][D3][D4][D5]    [A0][A1][A2][A3] 
+*/
+
 uint8_t g_PinStates;
-//  [b7][b6][b5][b4]    [b3][b2][b1][b0] 
-//  [D2][D3][D4][D5]    [A0][A1][A2][A3] 
-//      < output >          < input >
 
 
 void setup(void)
@@ -39,7 +41,7 @@ void loop(void)
     digitalWrite(D4, BIT_IS_SET(g_PinStates, 5));
     digitalWrite(D5, BIT_IS_SET(g_PinStates, 4));
 
-    // read new input states
+    // read new input states (negated bc of pull-up)
     BIT_OVERRIDE_WITH_VAL(g_PinStates, 3, !digitalRead(A0));
     BIT_OVERRIDE_WITH_VAL(g_PinStates, 2, !digitalRead(A1));
     BIT_OVERRIDE_WITH_VAL(g_PinStates, 1, !digitalRead(A2));

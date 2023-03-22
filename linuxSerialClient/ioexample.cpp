@@ -1,8 +1,9 @@
-#include <iostream>
+/** EXAMPLE PROGRAM TO DEMONSTRATE HOW SERIAL CLIENT CAN BE USED */
+
+
+// 1.) Include IO_ControllerSerialClient header:
 #include "IO_ControllerSerialClient.hpp"
 
-// compile:
-// g++ -std=c++17 -Wall -Wextra  main_example.cpp -o main_example.o 
 
 int main (void)
 {
@@ -10,9 +11,8 @@ int main (void)
     int pin;
     bool state;
 
-    // initialise a io controller object:
+    // 2.) Initialise an io controller client object with the port the controller is connected to:
     IO_ControllerSerialClient io_controller = IO_ControllerSerialClient("/dev/ttyUSB0");
-
 
     while (true)
     {
@@ -26,6 +26,7 @@ int main (void)
                 std::cerr << "ERROR: Pin Number " << pin << " is not an input!" << std::endl;
             }
             else{
+                // 3.) This is how pin states can be read:
                 state = io_controller.readPinState(pin);
                 std::cout << "Pin " << pin << " is on state " << state << std::endl;
             }
@@ -37,6 +38,7 @@ int main (void)
                 std::cerr << "ERROR: Pin Number " << pin << " is not an output!" << std::endl;
             }
             else{
+                // 3.) This is how pin states can be written to:
                 io_controller.writePinState(pin, state);
                 std::cout << "Writing state " << state << " on pin " << pin << " .." << std::endl;
             }

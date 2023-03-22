@@ -1,4 +1,5 @@
 #pragma once
+/** CLIENT THAT CAN BE USED TO COMUNICATE WITH THE IO CONTROLLER OVER SERIAL */
 
 #include <iostream>
 #include <string>
@@ -7,11 +8,11 @@
 #include "lxSerial.h"
 #include "../utils/bit.h"
 
-// NOTE: global pin states in one byte
-//  [b7][b6][b5][b4]    [b3][b2][b1][b0] 
-//  [D2][D3][D4][D5]    [A0][A1][A2][A3] 
-//      < output >          < input >
-
+/*  NOTE: BYTE DEFINITION - BIT-TO-PIN MAPPING
+                < output >         < input >
+    bits:   [b7][b6][b5][b4]    [b3][b2][b1][b0] 
+    pins:   [D2][D3][D4][D5]    [A0][A1][A2][A3] 
+*/
 
 
 class IO_ControllerSerialClient

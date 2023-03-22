@@ -1,5 +1,5 @@
-/** header only implementation to set up serial communication on linux */
 #pragma once
+/** HEADER ONLY IMPLEMENTATION TO SET UP SERIAL COMUNICATION UNDER LINUX */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,9 +16,8 @@
 
 
 
-
 /** @returns initialised serial port handle */
-int initialiseSerialConnection(const char* comPort)
+int initialiseSerialConnection (const char* comPort)
 {
     int returnValue;
 

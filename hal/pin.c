@@ -1,12 +1,6 @@
 #include "pin.h"
 #include "../utils/bit.h"
 
-/* 
-    This code maps the Arduino pinout to the ATmega328P pinout (driver or HAL).
-    The microcontroller can therfore be ported to another platform without having
-    to change the implementation of the application layer.   
-*/
-
 #define OFFSET_PORT_B 8
 #define OFFSET_PORT_C 14
 #define OFFSET_PORT_D 0

@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 #include <avr/io.h>
-#define F_CPU 16000000  // set CPU frequency in Hz
+#define F_CPU 16000000      // CPU frequency in Hz
 #include <util/delay.h>
 
 #define HIGH 1
@@ -19,6 +19,11 @@ typedef enum {
 } Mode;
 
 
+/** 
+    This code maps the Arduino pinout to the ATmega328P pinout (driver or HAL).
+    The microcontroller can therfore be ported to another platform without having
+    to change the implementation of the application layer.   
+*/
 typedef enum {
 //  Arduino         ATmega
     // port D
