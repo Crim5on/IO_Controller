@@ -22,32 +22,38 @@ int main (void)
         if(option == 'r'){
             std::cout << "Enter the input pin number you want to read (0-3): " << std::endl;
             std::cin >> pin;
-            if((pin < 0) || (pin > 3)){
-                std::cerr << "ERROR: Pin Number " << pin << " is not an input!" << std::endl;
-            }
-            else{
+            try{
                 // 3.) This is how pin states can be read:
                 state = io_controller.readPinState(pin);
                 std::cout << "Pin " << pin << " is on state " << state << std::endl;
+            }
+            catch(const std::out_of_range& exception){
+                std::cerr << "Exception: " << exception.what() << std::endl;
+            }
+            catch(const std::runtime_error& exception){
+                std::cerr << "Exception: " << exception.what() << std::endl;
             }
         }
         else if(option == 'w'){
             std::cout << "Enter the outpt pin number you want to write to (4-7), followed by the state (0/1): " << std::endl;
             std::cin >> pin >> state;
-            if((pin < 4) || (pin > 7)){
-                std::cerr << "ERROR: Pin Number " << pin << " is not an output!" << std::endl;
-            }
-            else{
+            try{
                 // 3.) This is how pin states can be written to:
                 io_controller.writePinState(pin, state);
-                std::cout << "Writing state " << state << " on pin " << pin << " .." << std::endl;
+                std::cout << "Writing state " << state << " on pin " << pin << " .." << std::endl;    
+            }
+            catch(const std::out_of_range& exception){
+                std::cerr << "Exception: " << exception.what() << std::endl;
+            }
+            catch(const std::runtime_error& exception){
+                std::cerr << "Exception: " << exception.what() << std::endl;
             }
         }
         else if(option == 'x'){
             break;
         }
         else{
-            std::cerr << "ERROR: Undefined User Input! (" << option << ')' << std::endl;
+            std::cerr << "Undefined User Input! (" << option << ')' << std::endl;
         }
     }
 

@@ -72,6 +72,9 @@ void IO_ControllerSerialClient::updatePinStates(void)
 
 bool IO_ControllerSerialClient::readPinState(uint8_t pin)
 {
+    if(pin > 3){
+        throw std::out_of_range("Not an input pin!");
+    }
     updatePinStates();
     bool pinState = BIT_IS_SET(g_PinStates, pin);
     return pinState;
@@ -80,6 +83,9 @@ bool IO_ControllerSerialClient::readPinState(uint8_t pin)
 
 void IO_ControllerSerialClient::writePinState(uint8_t pin, bool state)
 {
+    if((pin < 4) || (pin > 7)){
+        throw std::out_of_range("Not an output pin!");
+    }
     BIT_OVERRIDE_WITH_VAL(g_PinStates, pin, state);
     updatePinStates();
 }
