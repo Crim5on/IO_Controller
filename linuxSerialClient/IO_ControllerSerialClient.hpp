@@ -11,7 +11,7 @@
 /*  NOTE: BYTE DEFINITION - BIT-TO-PIN MAPPING
                 < output >         < input >
     bits:   [b7][b6][b5][b4]    [b3][b2][b1][b0] 
-    pins:   [D2][D3][D4][D5]    [A0][A1][A2][A3] 
+    pins:   [D5][D4][D3][D2]    [A3][A2][A1][A0] 
 */
 
 

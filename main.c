@@ -7,7 +7,7 @@
 /*  NOTE: BYTE DEFINITION - BIT-TO-PIN MAPPING
                 < output >         < input >
     bits:   [b7][b6][b5][b4]    [b3][b2][b1][b0] 
-    pins:   [D2][D3][D4][D5]    [A0][A1][A2][A3] 
+    pins:   [D5][D4][D3][D2]    [A3][A2][A1][A0] 
 */
 
 uint8_t g_PinStates;
@@ -36,16 +36,16 @@ void loop(void)
     g_PinStates = serialReceiveWithBusyWait();
 
     // write new output states
-    digitalWrite(D2, BIT_IS_SET(g_PinStates, 7));
-    digitalWrite(D3, BIT_IS_SET(g_PinStates, 6));
-    digitalWrite(D4, BIT_IS_SET(g_PinStates, 5));
-    digitalWrite(D5, BIT_IS_SET(g_PinStates, 4));
+    digitalWrite(D2, BIT_IS_SET(g_PinStates, 4));
+    digitalWrite(D3, BIT_IS_SET(g_PinStates, 5));
+    digitalWrite(D4, BIT_IS_SET(g_PinStates, 6));
+    digitalWrite(D5, BIT_IS_SET(g_PinStates, 7));
 
     // read new input states (negated bc of pull-up)
-    BIT_OVERRIDE_WITH_VAL(g_PinStates, 3, !digitalRead(A0));
-    BIT_OVERRIDE_WITH_VAL(g_PinStates, 2, !digitalRead(A1));
-    BIT_OVERRIDE_WITH_VAL(g_PinStates, 1, !digitalRead(A2));
-    BIT_OVERRIDE_WITH_VAL(g_PinStates, 0, !digitalRead(A3));
+    BIT_OVERRIDE_WITH_VAL(g_PinStates, 0, !digitalRead(A0));
+    BIT_OVERRIDE_WITH_VAL(g_PinStates, 1, !digitalRead(A1));
+    BIT_OVERRIDE_WITH_VAL(g_PinStates, 2, !digitalRead(A2));
+    BIT_OVERRIDE_WITH_VAL(g_PinStates, 3, !digitalRead(A3));
 
     // send updated input states back to client
     serialSendWithBusyWait(g_PinStates);
