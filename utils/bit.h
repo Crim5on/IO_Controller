@@ -1,5 +1,8 @@
 #pragma once 
 
+/*  Bit numbers
+    [ 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 ]
+*/
 
 /** @return a byte with only bit-th bit set. */
 #define BIT(bit) (1u << bit)
